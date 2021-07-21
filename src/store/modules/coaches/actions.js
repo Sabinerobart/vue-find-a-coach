@@ -20,7 +20,10 @@ export default {
 		}
 		context.commit('registerCoach', { ...coachData, id: userId })
 	},
-	async loadCoaches(context) {
+	async loadCoaches(context, payload) {
+		if (!payload.forceRefresh && !context.getters.shouldUpdate) {
+			return;
+		}
 		const res = await fetch(`https://find-a-coach-2494d-default-rtdb.europe-west1.firebasedatabase.app/coaches.json`);
 		const data = await res.json();
 		if (!res.ok) {
@@ -39,6 +42,7 @@ export default {
 			}
 			coaches.push(coach)
 		}
-		context.commit('setCoaches', coaches)
+		context.commit('setCoaches', coaches);
+		context.commit('setFetchTimestamp');
 	}
 }

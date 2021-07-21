@@ -15,7 +15,8 @@ export default {
 		})
 		// const resData = await res.json();
 		if (!res.ok) {
-			// error ..
+			const error = new Error(res.message || 'Failed to post !')
+			throw error;
 		}
 		context.commit('registerCoach', { ...coachData, id: userId })
 	},
@@ -23,7 +24,8 @@ export default {
 		const res = await fetch(`https://find-a-coach-2494d-default-rtdb.europe-west1.firebasedatabase.app/coaches.json`);
 		const data = await res.json();
 		if (!res.ok) {
-			// error ..
+			const error = new Error(res.message || 'Failed to fetch !')
+			throw error;
 		}
 		const coaches = [];
 		for (const key in data) {

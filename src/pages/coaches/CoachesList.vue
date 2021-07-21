@@ -1,4 +1,7 @@
 <template>
+  <base-dialog :show="!!error" title="An error occured !" @close="handleError">
+    <p>{{ error }}</p>
+  </base-dialog>
   <section>
     <coach-filter @change-filter="setFilters"></coach-filter>
   </section>
@@ -6,11 +9,14 @@
     <base-card>
       <div class="controls">
         <base-button mode="outline" @click="getCoaches">Refresh</base-button>
-        <base-button link to="/registration" v-if="!isCoach"
+        <base-button link to="/registration" v-if="!isCoach && !isLoading"
           >Register as coach</base-button
         >
       </div>
-      <ul v-if="hasCoaches">
+      <div v-if="isLoading">
+        <base-spinner></base-spinner>
+      </div>
+      <ul v-else-if="hasCoaches">
         <coach-item
           v-for="filteredCoach in filteredCoaches"
           :key="filteredCoach.id"
@@ -30,6 +36,7 @@
 import CoachItem from "../../components/coaches/CoachItem.vue";
 import BaseButton from "../../components/UI/BaseButton.vue";
 import CoachFilter from "../../components/coaches/CoachFilter.vue";
+
 export default {
   components: { CoachItem, BaseButton, CoachFilter },
   data() {
@@ -39,6 +46,8 @@ export default {
         backend: true,
         career: true,
       },
+      isLoading: false,
+      error: null,
     };
   },
   computed: {
@@ -58,7 +67,7 @@ export default {
       });
     },
     hasCoaches() {
-      return this.$store.getters["coaches/hasCoaches"];
+      return !this.isLoading && this.$store.getters["coaches/hasCoaches"];
     },
     isCoach() {
       return this.$store.getters["coaches/isCoach"];
@@ -68,8 +77,18 @@ export default {
     setFilters(updatedFilters) {
       this.activeFilters = updatedFilters;
     },
-    getCoaches() {
-      this.$store.dispatch("coaches/loadCoaches");
+    async getCoaches() {
+      this.isLoading = true;
+      try {
+        await this.$store.dispatch("coaches/loadCoaches");
+        this.isLoading = false;
+      } catch (error) {
+        this.error = error.message || "Something went wrong";
+      }
+    },
+    handleError() {
+      this.error = null;
+      this.isLoading = false;
     },
   },
   created() {

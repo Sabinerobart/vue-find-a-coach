@@ -55,6 +55,7 @@ export default {
         this.isLoading = false;
       } catch (error) {
         this.error = error || "Failed fetching the requests";
+        this.isLoading = false;
       }
     },
     handleError() {

@@ -23,6 +23,10 @@ const authenticate = async (context, payload, type) => {
     const error = new Error(resData.message || 'Failed to authenticate. Check your credentials');
     throw error
   }
+
+  localStorage.setItem('token', resData.idToken);
+  localStorage.setItem('userId', resData.localId);
+
   context.commit('setUser', {
     token: resData.idToken,
     userId: resData.localId,
@@ -36,6 +40,17 @@ export default {
   },
   async signup(context, payload) {
     authenticate(context, payload, 'signup')
+  },
+  tryLogin(context) {
+    const token = localStorage.getItem('token');
+    const userId = localStorage.getItem('userId');
+    if (token && userId) {
+      context.commit('setUser', {
+        token,
+        userId,
+        tokenExpiration: null
+      })
+    }
   },
   logout(context) {
     context.commit('setUser', {

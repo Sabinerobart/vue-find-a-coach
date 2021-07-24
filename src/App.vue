@@ -15,6 +15,9 @@ export default {
   components: {
     TheHeader,
   },
+  created() {
+    this.$store.dispatch("tryLogin");
+  },
 };
 </script>
 

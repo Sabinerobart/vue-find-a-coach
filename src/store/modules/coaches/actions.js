@@ -5,6 +5,7 @@ const { url } = conf.api;
 export default {
 	async registerCoach(context, data) {
 		const userId = context.rootGetters.userId;
+		const token = context.rootGetters.token;
 		const coachData = {
 			firstName: data.first,
 			lastName: data.last,
@@ -13,7 +14,7 @@ export default {
 			areas: data.areas
 		};
 
-		const res = await fetch(`${url}/coaches/${userId}.json`, {
+		const res = await fetch(`${url}/coaches/${userId}.json?auth=${token}`, {
 			method: 'PUT', // !POST because the id will already exist when we add authentication
 			body: JSON.stringify(coachData)
 		})

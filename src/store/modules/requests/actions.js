@@ -1,10 +1,14 @@
+import conf from "../../../utils/conf";
+
+const { url } = conf.api;
+
 export default {
   async contactCoach(context, payload) {
     const newRequest = {
       userEmail: payload.email,
       message: payload.message,
     }
-    const response = await fetch(`https://find-a-coach-2494d-default-rtdb.europe-west1.firebasedatabase.app/requests/${payload.coachId}.json`, {
+    const response = await fetch(`${url}/requests/${payload.coachId}.json`, {
       method: 'POST',
       body: JSON.stringify(newRequest)
     });
@@ -23,7 +27,8 @@ export default {
 
   async fetchRequests(context) {
     const coachId = context.rootGetters.userId;
-    const response = await fetch(`https://find-a-coach-2494d-default-rtdb.europe-west1.firebasedatabase.app/requests/${coachId}.json`);
+    const { token } = context.rootGetters
+    const response = await fetch(`${url}/requests/${coachId}.json?auth=${token}`);
     const resData = await response.json();
     if (!response.ok) {
       const error = new Error(resData.message || 'Failed to fetch requests.');

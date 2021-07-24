@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+import { createApp, defineAsyncComponent } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store/index.js'
@@ -6,7 +6,9 @@ import BaseCard from './components/UI/BaseCard'
 import BaseButton from './components/UI/BaseButton'
 import BaseBadge from './components/UI/BaseBadge'
 import BaseSpinner from './components/UI/BaseSpinner'
-import BaseDialog from './components/UI/BaseDialog'
+
+// Only download the code for this component if it's needed
+const BaseDialog = defineAsyncComponent(() => import('./components/UI/BaseDialog'))
 
 const app = createApp(App)
 app.use(router);

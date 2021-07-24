@@ -36,5 +36,12 @@ export default {
   },
   async signup(context, payload) {
     authenticate(context, payload, 'signup')
+  },
+  logout(context) {
+    context.commit('setUser', {
+      token: null,
+      userId: null,
+      tokenExpiration: null
+    })
   }
 }

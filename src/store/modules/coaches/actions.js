@@ -1,3 +1,7 @@
+import conf from "../../../utils/conf";
+
+const { url } = conf.api;
+
 export default {
 	async registerCoach(context, data) {
 		const userId = context.rootGetters.userId;
@@ -9,7 +13,7 @@ export default {
 			areas: data.areas
 		};
 
-		const res = await fetch(`https://find-a-coach-2494d-default-rtdb.europe-west1.firebasedatabase.app/coaches/${userId}.json`, {
+		const res = await fetch(`${url}/coaches/${userId}.json`, {
 			method: 'PUT', // !POST because the id will already exist when we add authentication
 			body: JSON.stringify(coachData)
 		})
@@ -24,7 +28,7 @@ export default {
 		if (!payload.forceRefresh && !context.getters.shouldUpdate) {
 			return;
 		}
-		const res = await fetch(`https://find-a-coach-2494d-default-rtdb.europe-west1.firebasedatabase.app/coaches.json`);
+		const res = await fetch(`${url}/coaches.json`);
 		const data = await res.json();
 		if (!res.ok) {
 			const error = new Error(res.message || 'Failed to fetch !')

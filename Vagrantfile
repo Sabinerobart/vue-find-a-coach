@@ -22,6 +22,7 @@ Vagrant.configure("2") do |config|
     config.vm.box = "bento/ubuntu-20.04"
     # forward port 8000 which is used by vue
     config.vm.network "forwarded_port", guest: 8080, host: 8081
+    config.vm.network "forwarded_port", guest: 9005, host: 9005
     # provision node and vue
     config.vm.provision "shell", path: "scripts/bootstrap-vagrant.sh"
   end

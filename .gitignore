@@ -26,3 +26,7 @@ pnpm-debug.log*
 # VM & IDE
 .vagrant/
 .vscode/
+
+# Cloud
+.firebase/
+firebase-debug.log

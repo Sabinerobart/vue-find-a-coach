@@ -17,6 +17,7 @@ apt-get install -y \
   
 # installing vue-cli
 npm install -g @vue/cli
+npm install -g firebase-tools
 
 rm -rf node_modules && yarn install
 
